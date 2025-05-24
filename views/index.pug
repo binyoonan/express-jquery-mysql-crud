@@ -1,0 +1,71 @@
+doctype html
+html
+  head
+    title welcome
+    meta(charset="utf-8")
+    style.
+      body {
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background: linear-gradient(135deg, #6a11cb, #2575fc);
+          font-family: Arial, sans-serif;
+          animation: fadeIn 1.5s ease-in-out;
+      }
+
+      .welcome-container {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 30px;
+          border-radius: 15px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+          text-align: center;
+          width: 320px;
+          color: white;
+      }
+
+      h1 {
+          font-size: 2rem;
+          margin-bottom: 10px;
+      }
+
+      p {
+          font-size: 1.1rem;
+          margin-bottom: 25px;
+      }
+
+      .btn {
+          display: inline-block;
+          width: 100%;
+          padding: 12px;
+          font-size: 1.2rem;
+          color: white;
+          background: rgba(255, 255, 255, 0.2);
+          border: 2px solid white;
+          border-radius: 30px;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          margin-top: 10px;
+      }
+
+      .btn:hover {
+          background: white;
+          color: #6a11cb;
+          transform: scale(1.05);
+      }
+
+      @keyframes fadeIn {
+          from {
+              opacity: 0;
+          }
+          to {
+              opacity: 1;
+          }
+      }
+  body
+    .welcome-container
+      h1 welcome
+      a.btn(href="/boards/list") 게시판 이동

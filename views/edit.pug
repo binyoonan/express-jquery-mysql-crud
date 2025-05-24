@@ -1,0 +1,158 @@
+doctype html
+html
+    head
+        title= "게시판 수정 - " + board.title
+        meta(charset="utf-8")
+        script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+        script(src="/js/ajax.js")
+        style.
+            body {
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #2575fc, #6a11cb);
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                color: white;
+                animation: fadeIn 1.5s ease-in-out;
+            }
+
+            .container {
+                text-align: center;
+                max-width: 600px;
+                padding: 30px;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+                animation: slideUp 0.5s ease-in-out;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+
+            .form-box {
+                background: rgba(255, 255, 255, 0.2);
+                padding: 20px;
+                border-radius: 10px;
+                margin-top: 15px;
+                text-align: left;
+                line-height: 1.6;
+            }
+
+            input, textarea {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 2px solid white;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                font-size: 1rem;
+                transition: background 0.3s ease;
+            }
+
+            input:focus, textarea:focus {
+                background: rgba(255, 255, 255, 0.3);
+                outline: none;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 1.2rem;
+                color: white;
+                background: rgba(0, 255, 0, 0.3);
+                border: 2px solid white;
+                border-radius: 30px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            button:hover {
+                background: white;
+                color: #2575fc;
+                transform: scale(1.1);
+            }
+
+            .back-btn {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 1.2rem;
+                color: white;
+                background: rgba(255, 255, 255, 0.2);
+                border: 2px solid white;
+                border-radius: 30px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            .back-btn:hover {
+                background: white;
+                color: #2575fc;
+                transform: scale(1.1);
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+    body
+        .container
+            h1 게시판 수정하기
+            .form-box
+                form#updateForm(action=`/boards/update/${board.id}` method="POST")
+                    label(for="title") 제목
+                    input(type="text" name="title" id="title" value=board.title required)
+                    label(for="content") 내용
+                    textarea(name="content" id="content" rows="6" required=board.content) #{board.content}
+                    button(type="submit") 수정하기
+            p#message(style="color: red; display: none;") 수정 중...
+            a.back-btn(href="/boards/list") 목록으로 돌아가기
+
+        script.
+            $(document).ready(function () {
+                $("#updateForm").submit(function (event) {
+                    event.preventDefault(); // 기본 제출 방지
+
+                    const form = $(this);
+                    const formData = {
+                        title: $("#title").val(),
+                        content: $("#content").val()
+                    };
+
+                    ajaxRequest(form.attr("action"), "POST", formData,
+                        function (response) { // 성공 콜백
+                            if (response.success) {
+                                window.location.href = `/boards/detail/${response.boardId}`; // 성공 시 상세 페이지로 이동
+                            } else {
+                                console.log("오류 발생: " + response.error);
+                            }
+                        },
+                        function (xhr, status, error) { // 오류 콜백
+                            console.log("오류 발생: " + error);
+                        }
+                    );
+                });
+            });

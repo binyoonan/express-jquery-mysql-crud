@@ -1,0 +1,119 @@
+doctype html
+html
+    head
+        title= title
+        meta(charset="utf-8")
+        script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+        script(src="/js/ajax.js")
+
+        style.
+            body {
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #6a11cb, #2575fc);
+                font-family: Arial, sans-serif;
+                animation: fadeIn 1.5s ease-in-out;
+            }
+
+            .container {
+                text-align: center;
+                color: white;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            .board-list {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .board-item {
+                background: rgba(255, 255, 255, 0.2);
+                margin: 10px 0;
+                padding: 15px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: transform 0.3s ease, background-color 0.3s ease;
+            }
+
+            .board-item:hover {
+                transform: scale(1.05);
+                background-color: rgba(255, 255, 255, 0.4);
+            }
+
+            .board-name {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .board-description {
+                font-size: 1rem;
+                margin-top: 10px;
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            .home-btn,
+            .create-btn {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 1.2rem;
+                color: white;
+                background: rgba(255, 255, 255, 0.2);
+                border: 2px solid white;
+                border-radius: 30px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            .home-btn:hover,
+            .create-btn:hover {
+                background: white;
+                color: #6a11cb;
+                transform: scale(1.1);
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+    body
+        .container
+            h1= title
+
+            ul.board-list(id="boardList")
+
+            // 홈으로 가기 버튼 추가
+            a.home-btn(href="/") 홈으로 가기
+            a.create-btn(href="/boards/insertForm") 글 작성하기
+
+        script.
+            $(document).ready(function () {
+                function loadBoards() {
+                    ajaxRequest('/boards/list', 'GET', {}, function (response) {
+                        let boardList = $('#boardList');
+                        boardList.empty();
+                        response.forEach(board => {
+                            let boardItem = `
+                                        <li class="board-item">
+                                            <a href="/boards/detail/${board.id}">
+                                                <div class="board-name">${board.title}</div>
+                                                <div class="board-description">${board.content}</div>
+                                            </a>
+                                        </li>
+                                    `;
+                            boardList.append(boardItem);
+                        });
+                    });
+                }
+
+                loadBoards();
+            });
