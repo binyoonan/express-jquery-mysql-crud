@@ -4,12 +4,18 @@ const fs = require('fs');
 
 // MySQL 연결 설정
 const connection = mysql.createConnection({
-    host: dbConfig.host,
-    port: dbConfig.port,
-    user: dbConfig.username,
-    password: dbConfig.password,
-    database: dbConfig.database
+  host: process.env.MYSQL_HOST || 'localhost',
+  port: process.env.MYSQL_PORT || 3306,
+  user: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASSWORD || '',
+  database: process.env.MYSQL_DATABASE || 'test',
+  ssl: false,           // SSL 완전 비활성화
 });
+console.log(process.env.MYSQL_HOST)
+console.log(process.env.MYSQL_PORT)
+console.log(process.env.MYSQL_USER)
+console.log(process.env.MYSQL_PASSWORD)
+console.log(process.env.MYSQL_DATABASE)
 
 const sql = fs.readFileSync('./sql/schema.sql', 'utf8');
 
